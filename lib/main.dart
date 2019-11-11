@@ -1,53 +1,82 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'api.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
 
-
-
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-
-
-
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      title: 'YouBike',
+      home: StationList(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-
-  @override
-  void initState() {
-    super.initState();
-    print("Hello world");
-    final api = ApiConnection();
-    api.fetchData();
-  }
-
+class StationList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    return new Scaffold(
+        body: FutureBuilder<List<Station>>(
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final data = snapshot.data;
+          return ListView.builder(
+            itemBuilder: (context, index) {
+              final Station item = data[index];
+              return card(item); //Text(item.sna);
+            },
+            itemCount: data.length,
+          );
+        } else if (snapshot.hasError) {
+          return Center(
+            child: Text('Error'),
+          );
+        } else {
+          return Center(
+            child: CupertinoActivityIndicator(),
+          );
+        }
+      },
+      future: ApiConnection().fetchData(10),
+    ));
+  }
 
-
-
-
-    return Scaffold(
+  Widget card(Station item) {
+    return Card(
+      child: Row(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              children: <Widget>[Text("正常")],
+            ),
+          ),
+          Expanded(
+              child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              SizedBox(height: 10),
+              Text(item.sna),
+              SizedBox(height: 5),
+              Text("${item.sbi}  ${item.bemp}"),
+              SizedBox(height: 10),
+            ],
+          )),
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              children: <Widget>[Text("600m")],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

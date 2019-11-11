@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http ;
 
 class ApiConnection {
-  Future<List<Station>> fetchData() async {
-    String url = 'https://data.ntpc.gov.tw/od/data/api/54DDDC93-589C-4858-9C95-18B2046CC1FC?\$format=json&\$top=2';
+  Future<List<Station>> fetchData(int count) async {
+    String url = 'https://data.ntpc.gov.tw/od/data/api/54DDDC93-589C-4858-9C95-18B2046CC1FC?\$format=json&\$top=$count';
 
     var response = await http.get(url);
 
@@ -14,36 +14,57 @@ class ApiConnection {
 
       final listStation = stationFromJson(response.body);
 
-      final s1 = listStation[0];
-
-      print(s1.sna);
-
       return listStation;
     } else {
       throw Exception('Failed to load post');
     }
 
   }
-
 }
 
 
-
 class Station {
-  String sno;
-  String sna;
-  String tot;
-  String sbi;
-  String sarea;
-  String mday;
-  String lat;
-  String lng;
-  String ar;
-  String sareaen;
-  String snaen;
-  String aren;
-  String bemp;
-  String act;
+  /// act(場站是否暫停營運)
+  final String act;
+
+  /// ar(中文地址)
+  final String ar;
+
+  /// aren(英文地址)
+  final String aren;
+
+  /// bemp(可還空位數)
+  final String bemp;
+
+  /// lat(緯度)
+  final String lat;
+
+  /// lng(經度)
+  final String lng;
+
+  /// mday(資料更新時間)
+  final String mday;
+
+  /// sarea(中文場站區域)
+  final String sarea;
+
+  /// sareaen(英文場站區域)
+  final String sareaen;
+
+  /// sbi(可借車位數)
+  final String sbi;
+
+  /// sna(中文場站名稱)
+  final String sna;
+
+  /// snaen(英文場站名稱)
+  final String snaen;
+
+  /// sno(站點代號)
+  final String sno;
+
+  /// tot(場站總停車格)
+  final String tot;
 
   Station({
     this.sno,
