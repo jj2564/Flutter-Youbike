@@ -1,4 +1,4 @@
-package irvinghuang.com.flutter_youbike
+package com.irvinghuang.flutter_youbike
 
 import android.os.Bundle
 
